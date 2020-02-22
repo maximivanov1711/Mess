@@ -3,7 +3,7 @@ import random
 '''
 Шифрование
 '''
-closed_key = random.randint(1000000000, 10000000000000000000)
+closed_key = random.randint(10000, 1000000000)
 print(closed_key)
 alphabit = ['П', 'Р']
 text = 'Р'
