@@ -1,4 +1,4 @@
-from client.dialog.dialog_interface import interface
+from .client.dialog_interface.dialog_interface import dialog_interface
 
 class Client:
 
@@ -40,4 +40,4 @@ def decrypt(open_key, closed_key):
     return message
 
 
-interface()
+dialog_interface()
