@@ -1,4 +1,5 @@
-from client.dialog_interface.dialog_interface import dialog_interface
+from modules.key_gen.key_gen import generate_key
+
 
 class Client:
 
@@ -40,4 +41,23 @@ def decrypt(open_key, closed_key):
     return message
 
 
-dialog_interface()
+# main program
+print('...')
+print('Создан ли ключ? [y / n]', end=' ')
+if input().strip() == 'y':
+    while True:
+        print('Введите закрытый ключ...')
+        try:
+            closed_key = int(input().strip())
+            break
+        except ValueError:
+            print('Попробуйте еще раз... ключ должен содержать только цифры')
+            continue
+else:
+    closed_key = generate_key()
+    print(f'Закрытый ключ создан\nclosed_key: {closed_key}')
+    print('Сохранить локально? [y /n]', end=' ')
+    if input().strip() == 'y':
+        with open('closed_key.txt', 'w') as file:
+            file.write(str(closed_key))
+        print('Ключ сохранен')
