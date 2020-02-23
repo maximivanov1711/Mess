@@ -42,7 +42,20 @@ def decrypt(open_key, closed_key):
 
 
 # main program
+
+# username
 print('...')
+try:
+    with open('username.txt') as file:
+        username = file.read()
+        print(f'Привет, {username}')
+except FileNotFoundError:
+    username = input('Введите ваше имя...\n').strip()
+    with open('username.txt', 'w') as file:
+        file.write(username)
+    print('Сохранено')
+
+# closed_key
 print('Создан ли ключ? [y / n]', end=' ')
 if input().strip() == 'y':
     while True:
