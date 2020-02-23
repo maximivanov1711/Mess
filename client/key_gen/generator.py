@@ -1,8 +1,7 @@
 import random
 
 
-class Gen:
-    def generator_closed_key(self):
+def generator_closed_key():
         print('Вы запустили программу для генерации mess-ключа, для повторной генерации нажмите Enter...\
               \nНе передавайте этот ключ никому, кроме собеседника')
         while True:

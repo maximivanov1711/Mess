@@ -1,8 +1,7 @@
 import random
 
 
-class Dialog:
-    def interface(self):
+def interface():
         print('...')
         print('Создан ли ключ? [y / n]', end=' ')
         if input().strip() == 'y':
