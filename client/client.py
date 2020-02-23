@@ -1,5 +1,5 @@
-from client.dialog.dialog_interface import Dialog
-
+# from client.dialog.dialog_interface import Dialog
+from .dialog.dialog_interface import Dialog
 
 class Client:
 

@@ -22,5 +22,3 @@ class Dialog:
                 with open('closed_key.txt', 'w') as file:
                     file.write(str(closed_key))
                 print('Ключ сохранен')
-        while True:
-            break
