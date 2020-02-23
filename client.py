@@ -1,4 +1,4 @@
-from .client.dialog_interface.dialog_interface import dialog_interface
+from client.dialog_interface.dialog_interface import dialog_interface
 
 class Client:
 
