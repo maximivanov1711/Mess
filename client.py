@@ -48,12 +48,19 @@ print('...')
 try:
     with open('username.txt') as file:
         username = file.read()
+        assert len(username) > 0
         print(f'Привет, {username}')
-except FileNotFoundError:
-    username = input('Введите ваше имя...\n').strip()
-    with open('username.txt', 'w') as file:
-        file.write(username)
-    print('Сохранено')
+except (FileNotFoundError, AssertionError):
+    while True:
+        username = input('Введите ваше имя...\n').strip()
+        if 10 >= len(username) > 0:
+            with open('username.txt', 'w') as file:
+                file.write(username)
+            print('Сохранено')
+            break
+        else:
+            print('Имя должно содержать не больше 10 символов')
+            continue
 
 # closed_key
 print('Создан ли ключ? [y / n]', end=' ')
