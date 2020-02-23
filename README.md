@@ -1,4 +1,2 @@
 # __MESS__
-**Messenger for safe communication.**\
-
-_**https://mess.host**_
+Messenger for safe communication.
