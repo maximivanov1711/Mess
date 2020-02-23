@@ -1,4 +1,4 @@
-import requests
+import random
 
 
 class Client:
@@ -23,3 +23,19 @@ def decrypt(open_key, closed_key):
         let = int(i / closed_key)
         message += chr(let)
     return message
+
+
+print('...')
+print('Создан ли ключ? [y / n]', end=' ')
+if input().strip() == 'y':
+    pass
+else:
+    closed_key = random.randint(10000, 1000000000)
+    print(f'Закрытый ключ создан\nclosed key: {closed_key}')
+    print('Сохранить локально? [y /n]', end=' ')
+    if input().strip() == 'y':
+        with open('closed_key.txt', 'w') as file:
+            file.write(str(closed_key))
+        print('Ключ сохранен')
+while True:
+    break
