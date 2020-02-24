@@ -1,44 +1,7 @@
+from cls.Client.Client import Client
+from cls.Chat.Chat import Chat
+from cls.Message.Message import Message
 from modules.key_gen.key_gen import generate_key
-
-
-class Client:
-
-    def __init__(self):
-        pass
-
-    def sendMessage(self, text):
-        """
-        :param text:
-        :return:
-        """
-        pass
-
-
-def encrypt(text, closed_key):
-    """
-    Функция шифрования сообщений
-    :param text: аргумент функции хранит текст сообщения
-    :param closed_key: аргумент функции хранит закрытый ключ шифрования
-    :return: функция возвращает открытый ключ (шифротекст)
-    """
-    open_key = []
-    for i in text:
-        open_key.append(ord(i) * closed_key)
-    return open_key
-
-
-def decrypt(open_key, closed_key):
-    """
-    Функция дешифровки сообщений
-    :param open_key: аргумент функции хранит открытый ключ (шифротекст)
-    :param closed_key: аргумент функции хранит закрытый ключ шифрования
-    :return: функция возвращает расшифрованное сообщение
-    """
-    message = ''
-    for i in open_key:
-        let = int(i / closed_key)
-        message += chr(let)
-    return message
 
 
 # main program
@@ -47,14 +10,15 @@ def decrypt(open_key, closed_key):
 print('...')
 try:
     with open('username.txt') as file:
-        username = file.read()
-        assert len(username) > 0
-        print(f'Привет, {username}')
+        User = Client(file.read())
+        assert len(user.userName) > 0
+        print(f'Привет, {user.userName}')
 except (FileNotFoundError, AssertionError):
     while True:
         username = input('Введите ваше имя...\n').strip()
         if 10 >= len(username) > 0:
             with open('username.txt', 'w') as file:
+                User = Client(username)
                 file.write(username)
             print('Сохранено')
             break
@@ -69,12 +33,14 @@ if input().strip() == 'y':
         print('Введите закрытый ключ...')
         try:
             closed_key = int(input().strip())
+            assert len(str(closed_key)) <= 50
+            Chat = Chat(closed_key)
             break
-        except ValueError:
+        except (ValueError, AssertionError):
             print('Попробуйте еще раз... ключ должен содержать только цифры')
             continue
 else:
-    closed_key = generate_key()
+    Chat = Chat(generate_key())
     print(f'Закрытый ключ создан\nclosed_key: {closed_key}')
     print('Сохранить локально? [y /n]', end=' ')
     if input().strip() == 'y':
