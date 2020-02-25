@@ -1,16 +1,27 @@
 class Message:
 
+    # в разработке!
     @staticmethod
-    def send(text, closed_key):
+    def send(open_key):
         """
         Функция отправки сообщения
+        :param open_key: аргумент функции хранит шифротекст
+        :return: функция возвращает 1 если сообщение успешно отправленно
+        """
+
+
+    @staticmethod
+    def encrypt(text, closed_key):
+        """
+        Функция шифровки сообщений
         :param text: аргумент функции хранит текст сообщения
         :param closed_key: аргумент функции хранит закрытый ключ шифрования
-        :return: функция возвращает открытый ключ (шифротекст)
+        :return: функция возвращает зашифрованное сообщение (шифротекст)
         """
         open_key = []
         for i in text:
             open_key.append(ord(i) * closed_key)
+        print(open_key)
 
     @staticmethod
     def decrypt(open_key, closed_key):
