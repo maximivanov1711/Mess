@@ -1,9 +1,9 @@
 import re
+from cls.Data_cls.Data_cls import Data
 from cls.Client_cls.Client_cls import Client
-from cls.Chat_cls.Chat_cls import Chat
 from cls.Message_cls.Message_cls import Message
-from modules.keyGen_module.keyGen_module import generate_key
-
+from modules.generate_closed_key.generate_closed_key import generate_closed_key
+from modules.chat_id_gen_module.chat_id_gen_module import generate_chat_id
 
 # main program
 
@@ -31,18 +31,23 @@ while True:
     inp = input().strip()
     if re.match(r'/.*/', inp):
 
-        if inp.startswith('/connect/'): #/connect/ {chat_id, closed_key}
-            try:
-                attr = inp[9:].split()
-                assert len(attr) == 2
-                chat_id = int(attr[0])
-                closed_key = int(attr[1])
-            except (ValueError, AssertionError):
-                print('неверный id или closed_key')
-                continue
+        if inp.startswith('/connect/'): #/connect/ {chat_id}
+            pass
+
+        elif inp.startswith('/new/'): # /new/ {username}
+            attr = inp[5:].split() #comand attributes
+
+            username = attr[0]
+
+            if not Data.is_created(username):
+                chat_id = generate_chat_id()
+                closed_key = generate_closed_key()
+                Data.add_chat(username, chat_id, closed_key)
             else:
-                MyChat = Chat(closed_key, chat_id)
-                print(MyChat)
+                print('Чат с этим пользователем уже создан')
+
+        elif inp == '/list/':
+            print(*Data.list_chats())
 
         elif inp == '/exit/':
             exit()

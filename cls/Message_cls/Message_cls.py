@@ -3,11 +3,7 @@ class Message:
     # в разработке!
     @staticmethod
     def send(open_key):
-        """
-        Функция отправки сообщения
-        :param open_key: аргумент функции хранит шифротекст
-        :return: функция возвращает 1 если сообщение успешно отправленно
-        """
+        pass
 
 
     @staticmethod
