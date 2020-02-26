@@ -3,7 +3,7 @@ from cls.Data_cls.Data_cls import Data
 from cls.Client_cls.Client_cls import Client
 from cls.Message_cls.Message_cls import Message
 from modules.generate_closed_key.generate_closed_key import generate_closed_key
-from modules.chat_id_gen_module.chat_id_gen_module import generate_chat_id
+from modules.generate_chat_id.generate_chat_id import generate_chat_id
 
 # main program
 
