@@ -30,13 +30,19 @@ print(User)
 while True:
     inp = input().strip()
     if re.match(r'/.*/', inp):
-
         if inp.startswith('/connect/'): #/connect/ {chat_id}
             pass
 
         elif inp.startswith('/new/'): # /new/ {username}
             attr = inp[5:].split() #comand attributes
 
+            try:
+                assert attr
+            except AssertionError:
+                print('Неверные аргументы')
+                continue
+
+            # attributes
             username = attr[0]
 
             if not Data.is_created(username):
@@ -46,11 +52,46 @@ while True:
             else:
                 print('Чат с этим пользователем уже создан')
 
+        elif inp.startswith('/get/'): # /get/ {username}
+            attr = inp[5:].split() #comand attributes
+
+            try:
+                assert attr
+            except AssertionError:
+                print('Неверные аргументы')
+                continue
+
+            # attributes
+            username = attr[0]
+
+            if Data.is_created(username):
+                print(Data.get_chat(username))
+            else:
+                print('Такого чата нет')
+
+        elif inp.startswith('/delete/'): # /delete/ {username}
+            attr = inp[8:].split() #comand attributes
+
+            try:
+                assert attr
+            except AssertionError:
+                print('Неверные аргументы')
+                continue
+
+            # attributes
+            username = attr[0]
+
+            if Data.is_created(username):
+                Data.delete_chat(username)
+                print('Чат удален')
+            else:
+                print('Такого чата нет')
+        
         elif inp == '/list/':
             print(*Data.list_chats())
-
+            
         elif inp == '/exit/':
             exit()
-
+        
         else:
-            print('Такой команды не существует...')
+            print('Такой команды не существует...')        

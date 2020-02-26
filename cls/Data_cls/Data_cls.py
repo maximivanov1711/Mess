@@ -3,7 +3,6 @@ from datetime import datetime
 
 
 class Data:
-
     @staticmethod
     def is_created(username):
         try:
@@ -39,15 +38,20 @@ class Data:
             with open('./data.json', 'w') as file:
                 json.dump(data, file, indent=4)
 
+
     @staticmethod
     def get_chat(username):
-        try:
-            with open('./data.json') as file:
-                data = json.load(file)
-        except FileNotFoundError:
-            return None
-        else:
-            return data[username]
+        with open('./data.json') as file:
+            data = json.load(file)
+        return data[username]
+
+    @staticmethod
+    def delete_chat(username):
+        with open('./data.json') as file:
+            data = json.load(file)
+        del data[username]
+        with open('./data.json', 'w') as file:
+            json.dump(data, file, indent=4)
 
     @staticmethod
     def list_chats():
