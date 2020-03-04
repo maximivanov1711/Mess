@@ -1,5 +1,4 @@
 class Message:
-
     # в разработке!
     @staticmethod
     def send(open_key):

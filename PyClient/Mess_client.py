@@ -1,37 +1,63 @@
 import re
-from cls.Data_cls.Data_cls import Data
+from cls.Thread_cls.Thread_cls import Printer 
+from cls.ChatList_cls.ChatList_cls import ChatList
 from cls.Client_cls.Client_cls import Client
 from cls.Message_cls.Message_cls import Message
 from modules.generate_closed_key.generate_closed_key import generate_closed_key
 from modules.generate_chat_id.generate_chat_id import generate_chat_id
 
+
 # main program
 
-# username
+ChatList.create() # create chatList.json
+
+# registration
 print('...')
 try:
     with open('username.txt') as file:
-        User = Client(file.read())
-        assert len(User.userName) > 0
-        print(f'Привет, {User.userName}')
+        username = file.read()
+        assert re.match(r'^[\w\d]{5,30}$', username)
 except (FileNotFoundError, AssertionError):
+    ChatList.create()
+    print('Регистрация...')
     while True:
-        username = input('Введите ваше имя...\n').strip()
-        if 10 >= len(username) > 0:
+        username = input('Введите имя > ').strip()
+        if re.match(r'^[\w\d]{5,30}$', username):
             with open('username.txt', 'w') as file:
-                User = Client(username)
                 file.write(username)
-            print('Сохранено')
+            print('Регистрация прошла успешно')
             break
         else:
-            print('Имя должно содержать не больше 10 символов')
-            continue
-print(User)
+            print('Неверное имя...')
+else:
+    User = Client(username)
+    print(f'Привет, {User.userName}')
+
 while True:
     inp = input().strip()
     if re.match(r'/.*/', inp):
         if inp.startswith('/connect/'): #/connect/ {chat_id}
-            pass
+            attr = inp[9:].split()
+
+            try:
+                assert attr
+            except AssertionError:
+                print('Неверные аргументы...')
+                continue
+
+            # attributes
+            username = attr[0]
+            
+            if ChatList.chat_is_created(username):
+                t = Printer('thread')
+                t.start()
+                while True:
+                    inp = input().strip()
+                    if inp == '/close/':
+                        t.stop = True
+                        break
+            else:
+                print('Такого чата нет...')
 
         elif inp.startswith('/new/'): # /new/ {username}
             attr = inp[5:].split() #comand attributes
@@ -39,18 +65,19 @@ while True:
             try:
                 assert attr
             except AssertionError:
-                print('Неверные аргументы')
+                print('Неверные аргументы...')
                 continue
 
             # attributes
             username = attr[0]
 
-            if not Data.is_created(username):
+            if not ChatList.chat_is_created(username):
                 chat_id = generate_chat_id()
                 closed_key = generate_closed_key()
-                Data.add_chat(username, chat_id, closed_key)
+                ChatList.add_chat(username, chat_id, closed_key)
+                print('Чат создан')
             else:
-                print('Чат с этим пользователем уже создан')
+                print('Чат с этим пользователем уже создан...')
 
         elif inp.startswith('/get/'): # /get/ {username}
             attr = inp[5:].split() #comand attributes
@@ -58,16 +85,16 @@ while True:
             try:
                 assert attr
             except AssertionError:
-                print('Неверные аргументы')
+                print('Неверные аргументы...')
                 continue
 
             # attributes
             username = attr[0]
 
-            if Data.is_created(username):
-                print(Data.get_chat(username))
+            if ChatList.chat_is_created(username):
+                print(ChatList.get_chat(username))
             else:
-                print('Такого чата нет')
+                print('Такого чата нет...')
 
         elif inp.startswith('/delete/'): # /delete/ {username}
             attr = inp[8:].split() #comand attributes
@@ -75,20 +102,24 @@ while True:
             try:
                 assert attr
             except AssertionError:
-                print('Неверные аргументы')
+                print('Неверные аргументы...')
                 continue
 
             # attributes
             username = attr[0]
 
-            if Data.is_created(username):
-                Data.delete_chat(username)
+            if ChatList.chat_is_created(username):
+                ChatList.delete_chat(username)
                 print('Чат удален')
             else:
-                print('Такого чата нет')
+                print('Такого чата нет...')
         
         elif inp == '/list/':
-            print(*Data.list_chats())
+            if ChatList.list_chats():
+                for chat in ChatList.list_chats():
+                    print(chat)
+            else:
+                print('Нет чатов...')
             
         elif inp == '/exit/':
             exit()
