@@ -7,28 +7,28 @@ from modules.generate_closed_key.generate_closed_key import generate_closed_key
 from modules.generate_chat_id.generate_chat_id import generate_chat_id
 
 
-# main program
+# Основная программа
 
-ChatList.create() # create chatList.json
+ChatList.create() # Создание списка переписок
 
-# registration
+# Регистрация
 print('...')
 try:
     with open('username.txt') as file:
-        username = file.read()
-        assert re.match(r'^[\w\d]{5,30}$', username)
-except (FileNotFoundError, AssertionError):
-    ChatList.create()
+        username = file.read() # Чтение имени пользователя из файла
+        assert re.match(r'^[\w\d]{5,30}$', username) # Валидация
+except (FileNotFoundError, AssertionError): # Если файл не найден или имя пользователя не прошло валидацию
+    ChatList.create() # Перезапись списка переписок
     print('Регистрация...')
     while True:
-        username = input('Введите имя > ').strip()
-        if re.match(r'^[\w\d]{5,30}$', username):
+        username = input('Введите имя > ').strip() # Ввод имени пользователем
+        if re.match(r'^[\w\d]{5,30}$', username): # Валидация
             with open('username.txt', 'w') as file:
-                file.write(username)
+                file.write(username) # Запись имени в файл
             print('Регистрация прошла успешно')
             break
         else:
-            print('Неверное имя...')
+            print('Неверное имя...') # Выводится если имя не прошло валидацию 
 else:
     User = Client(username)
     print(f'Привет, {User.userName}')
@@ -45,7 +45,7 @@ while True:
                 print('Неверные аргументы...')
                 continue
 
-            # attributes
+            # Атрибуты команды 
             username = attr[0]
             
             if ChatList.chat_is_created(username):
@@ -60,7 +60,7 @@ while True:
                 print('Такого чата нет...')
 
         elif inp.startswith('/new/'): # /new/ {username}
-            attr = inp[5:].split() #comand attributes
+            attr = inp[5:].split()
 
             try:
                 assert attr
@@ -68,7 +68,7 @@ while True:
                 print('Неверные аргументы...')
                 continue
 
-            # attributes
+            # Атрибуты команды 
             username = attr[0]
 
             if not ChatList.chat_is_created(username):
@@ -80,7 +80,7 @@ while True:
                 print('Чат с этим пользователем уже создан...')
 
         elif inp.startswith('/get/'): # /get/ {username}
-            attr = inp[5:].split() #comand attributes
+            attr = inp[5:].split()
 
             try:
                 assert attr
@@ -88,7 +88,7 @@ while True:
                 print('Неверные аргументы...')
                 continue
 
-            # attributes
+            # Атрибуты команды 
             username = attr[0]
 
             if ChatList.chat_is_created(username):
@@ -97,7 +97,7 @@ while True:
                 print('Такого чата нет...')
 
         elif inp.startswith('/delete/'): # /delete/ {username}
-            attr = inp[8:].split() #comand attributes
+            attr = inp[8:].split()
 
             try:
                 assert attr
@@ -105,7 +105,7 @@ while True:
                 print('Неверные аргументы...')
                 continue
 
-            # attributes
+            # Атрибуты команды 
             username = attr[0]
 
             if ChatList.chat_is_created(username):
