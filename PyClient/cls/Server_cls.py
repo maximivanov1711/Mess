@@ -25,5 +25,5 @@ class Server:
 
 	@staticmethod
 	def send_message(chat_id, username, text, closed_key):
-		message = Message.encrypt([chat_id, username, text, closed_key])
+		message = Message.encrypt([chat_id, username, text], closed_key)
 		print(message)
