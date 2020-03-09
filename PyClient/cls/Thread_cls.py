@@ -2,7 +2,16 @@ from .Server_cls import Server
 from .ChatList_cls import ChatList
 from .Message_cls import Message
 import threading
+import logging
 import time
+
+
+logging.basicConfig(
+	level=logging.INFO,
+	filename='./server.log',
+	filemode='w',
+	format='%(message)s'
+)
 
 
 class Thread(threading.Thread):
@@ -24,6 +33,7 @@ class Thread(threading.Thread):
 				messages = list(map(Message.format, messages))
 
 				for message in messages:
+					logging.info(f'> :MESSAGE: {message}')
 					print(message)
 
 				self.initial += len(messages)
