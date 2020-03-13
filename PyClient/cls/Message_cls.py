@@ -2,9 +2,9 @@ class Message:
     @staticmethod
     def format(message):
         date = message[0]
-        user = message[2]
+        username = message[2]
         text = message[3]
-        message = f'{date} | {user}: {text}'
+        message = f'{date} | {username}: {text}'
         return message
 
     @staticmethod

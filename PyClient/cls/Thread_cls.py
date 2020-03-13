@@ -33,7 +33,7 @@ class Thread(threading.Thread):
 				messages = list(map(Message.format, messages))
 
 				for message in messages:
-					logging.info(f'> :MESSAGE: {message}')
+					logging.info(f'> :SERVER: |NEW MESSAGE| {message}')
 					print(message)
 
 				self.initial += len(messages)

@@ -4,7 +4,7 @@ from datetime import datetime
 
 class ChatList:
     @staticmethod
-    def create():
+    def create_chatlist():
         with open('chatlist.json', 'w') as file:
             json.dump({}, file)
 
@@ -35,8 +35,8 @@ class ChatList:
                 'closed_key': closed_key,
                 'initial': 0
             }
-            with open('./chatlist.json', 'w') as file:
-                json.dump(chatlist, file, indent=4, ensure_ascii=False)
+        with open('./chatlist.json', 'w') as file:
+            json.dump(chatlist, file, indent=4, ensure_ascii=False)
 
     @staticmethod
     def get_chat(username):
@@ -61,7 +61,7 @@ class ChatList:
             json.dump(chatlist, file, indent=4, ensure_ascii=False)
 
     @staticmethod
-    def list_chats():
+    def get_list_chats():
         try:
             with open('./chatlist.json') as file:
                 chatlist = json.load(file)
