@@ -14,7 +14,7 @@ logging.basicConfig(
 
 class Server:
 	@staticmethod
-	def user_is_created(username): # get 'http://api.mess.host/get/user_is_created?username=max'
+	def user_is_created(username): # get http://api.mess.host/get/user_is_created?username=max
 		logging.info(f'< :USER: <get> |user_is_created| username={username}')
 		r = requests.get('http://api.mess.host/get/user_is_created', params={'username':username})
 		logging.info(f'> :SERVER: |user_is_created| username={username} code={r.status_code}')
@@ -30,20 +30,20 @@ class Server:
 		return None
 
 	@staticmethod
-	def delete_user(username):
+	def delete_user(username): # post http://api.mess.host/post/delete_user data={username}
 		logging.info(f'< :USER: <post> |delete_user| username={username}')
 		r = requests.post('http://api.mess.host/post/delete_user', data={'username':username})
 		logging.info(f'> :SERVER: |delete_user| username={username} code={r.status_code}')
 		return None
 
 	@staticmethod
-	def chat_is_created(chat_id):
+	def chat_is_created(chat_id): # get http://api.mess.host/get/chat_is_created?chat_id=12345
 		logging.info(f'< :USER: <get> |chat_is_created| chat_id={chat_id}')
 		r = requests.get('http://api.mess.host/get/chat_is_created', params={'chat_id':chat_id})
 		logging.info(f'> :SERVER: |chat_is_created| chat_id={chat_id} code={r.status_code}')
 		if r:
 			return True
-		return True
+		return False
 
 	@staticmethod
 	def create_chat(chat_id, user1, user2): # post http://api.mess.host/post/create_chat data={chat_id, user1, user2}
@@ -60,7 +60,7 @@ class Server:
 		return None
 
 	@staticmethod
-	def get_messages_from_chat(chat_id, initial): # get 'http://api.mess.host/get/get_messages_from_chat?chat_id=12345&initial=0'
+	def get_messages_from_chat(chat_id, initial): # get http://api.mess.host/get/get_messages_from_chat?chat_id=12345&initial=0
 		r = requests.get('http://api.mess.host/get/get_messages_from_chat', params={'chat_id':chat_id,'initial':initial})
 		# messages = r.json()
 		# return messages
