@@ -27,14 +27,14 @@ class Server:
 		logging.info(f'< :USER: <post> |create_user| username={username}')
 		r = requests.post('http://api.mess.host/post/create_user', data={'username':username})
 		logging.info(f'> :SERVER: |create_user| username={username} code={r.status_code}')
-		return None
+		return r
 
 	@staticmethod
 	def delete_user(username): # post http://api.mess.host/post/delete_user data={username}
 		logging.info(f'< :USER: <post> |delete_user| username={username}')
 		r = requests.post('http://api.mess.host/post/delete_user', data={'username':username})
 		logging.info(f'> :SERVER: |delete_user| username={username} code={r.status_code}')
-		return None
+		return r
 
 	@staticmethod
 	def chat_is_created(chat_id): # get http://api.mess.host/get/chat_is_created?chat_id=12345
@@ -50,14 +50,14 @@ class Server:
 		logging.info(f'< :USER: <post> |create_chat| chat_id={chat_id} user1={user1} user2={user2}')
 		r = requests.post('http://api.mess.host/post/create_chat', data={'chat_id': chat_id,'user1': user1,'user2':user2})
 		logging.info(f'> :SERVER: |create_chat| chat_id={chat_id} user1={user1} user2={user2} code={r.status_code}')
-		return None
+		return r
 
 	@staticmethod
 	def delete_chat(chat_id): # post http://api.mess.host/post/delete_chat data={chat_id}
 		logging.info(f'< :USER: <post> |delete_chat| chat_id={chat_id}')
 		r = requests.post('http://api.mess.host/post/delete_chat', data={'chat_id':chat_id})
 		logging.info(f'> :SERVER: |delete_chat| chat_id={chat_id} code={r.status_code}')
-		return None
+		return r
 
 	@staticmethod
 	def get_messages_from_chat(chat_id, initial): # get http://api.mess.host/get/get_messages_from_chat?chat_id=12345&initial=0
@@ -73,5 +73,5 @@ class Server:
 		message = Message.encrypt([chat_id, date, username, text], closed_key)
 		r = requests.post('http://api.mess.host/post/send_message', data={'message':message})
 		logging.info(f'> :SERVER: |send_message| message={chat_id, date, username, text} code={r.status_code}')
-		return None
+		return r
 		
