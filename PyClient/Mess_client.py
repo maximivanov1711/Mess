@@ -20,21 +20,38 @@ except (FileNotFoundError, AssertionError):
     print('Регистрация...')
     while True:
         username = input('Введите имя > ').strip()
-        if validate_username(username):
-            if not Server.user_is_created(username):
+        
+        try:
+            request = Server.user_is_created(username)
+        except Exception as e:
+            print(e)
+        else:
+            if request:
+                print('Имя занято...')
+                continue
+            else:
+                print('ERROR', request.status_code)
+
+        if not validate_username(username):
+            print('Неправильное имя...')
+            continue
+        
+        try:
+            request = Server.create_user(username)
+        except Exception as e:
+            print(e)
+        else:
+            if request:
                 with open('username.txt', 'w') as file:
                     file.write(username)
-                Server.create_user(username)
                 print('Регистрация прошла успешно')
-                break
             else:
-                print('Имя занято...')
-        else:
-            print('Неверное имя...')
+                print('ERROR', request.status_code) 
 finally:
     User = Client(username)
     print(f'Привет, {User.username}')
 
+# Основная программа
 while True:
     inp = input().strip()
     if inp.startswith('/connect/'): #/connect/ {username}
@@ -46,29 +63,33 @@ while True:
 
         username = attribuеs[0]
 
-        if ChatList.chat_is_created(username):
-            chat_id = ChatList.get_chat(username)['chat_id']
-            closed_key = ChatList.get_chat(username)['closed_key']
-            t = Thread(username, chat_id, closed_key)
-            t.start()
-            while True:
-                inp = input().strip()
-                if inp != '/close/':
-                    try:
-                        request = Server.send_message(chat_id, User.username, inp, closed_key)
-                    except Exception as e:
-                        print(e)
-                    else:
-                        if request:
-                            ChatList.update_initial(username, 1)
-                            print('Успешно!')
-                        else:
-                            print('ERROR', request.status_code)
-                else:
-                    t.stop = True
-                    break
-        else:
+        if not ChatList.chat_is_created(username):
             print('Такого чата нет...')
+            continue
+
+        chat_id = ChatList.get_chat(username)['chat_id']
+        closed_key = ChatList.get_chat(username)['closed_key']
+        
+        t = Thread(username, chat_id, closed_key)
+        t.start()
+        
+        while True:
+            inp = input().strip()
+            
+            if inp == '/close/':
+                t.stop = True
+                break
+
+            try:
+                request = Server.send_message(chat_id, User.username, inp, closed_key)
+            except Exception as e:
+                print(e)
+            else:
+                if request:
+                    ChatList.update_initial(username, 1)
+                    print('Успешно!')
+                else:
+                    print('ERROR', request.status_code)
 
     elif inp.startswith('/add/'): # /add/ {username} {chat_id} {closed_key}
         attribuеs = inp[5:].split()
@@ -84,12 +105,14 @@ while True:
         try:
             request = Server.user_is_created(username)
         except Exception as e:
-            print('ERROR', e)
+            print(e)
             continue
         else:
             if not request:
                 print('Такого пользователя не существует...')
                 continue
+            else:
+                print('ERROR', request.status_code)
 
         if not ChatList.chat_is_created(username):
             ChatList.create_chat(username, chat_id, closed_key) 
@@ -109,30 +132,30 @@ while True:
         try:
             request = Server.user_is_created(username)
         except Exception as e:
-            print('ERROR', e)
+            print(e)
             continue
         else:
             if not request:
                 print('Такого пользователя не существует...')
                 continue
 
-        if not ChatList.chat_is_created(username):
-            chat_id = generate_chat_id()
-            closed_key = generate_closed_key()
-            
-            ChatList.create_chat(username, chat_id, closed_key)
-            try:
-                request = Server.create_chat(chat_id, User.username, username)
-            except Exception as e:
-                print('ERROR', e)
-            else:
-                if request:
-                    print(f'Чат создан\nchat_id: {chat_id}\nclosed_key: {closed_key}')
-                else:
-                    print('ERROR', request.status_code)
-
-        else:
+        if ChatList.chat_is_created(username):
             print('Чат с этим пользователем уже создан...')
+            continue
+
+        chat_id = generate_chat_id()
+        closed_key = generate_closed_key()
+        
+        ChatList.create_chat(username, chat_id, closed_key)
+        try:
+            request = Server.create_chat(chat_id, User.username, username)
+        except Exception as e:
+            print(e)
+        else:
+            if request:
+                print(f'Чат создан\nchat_id: {chat_id}\nclosed_key: {closed_key}')
+            else:
+                print('ERROR', request.status_code)
 
     elif inp.startswith('/get/'): # /get/ {username}
         attribuеs = inp[5:].split()
@@ -157,23 +180,24 @@ while True:
 
         username = attribuеs[0]
 
-        if ChatList.chat_is_created(username):
-            chat_id = ChatList.get_chat(username)['chat_id']
-            
-            ChatList.delete_chat(username)
-            try:
-                request = Server.delete_chat(chat_id)
-            except Exception as e:
-                print('ERROR', e)
-            else:
-                if request:
-                    print('Чат удален')
-                else:
-                    print('ERROR', request.status_code)
-        else:
+        if not ChatList.chat_is_created(username):
             print('Такого чата нет...')
+            continues
 
-    elif inp == '/list/':
+        chat_id = ChatList.get_chat(username)['chat_id']
+        
+        ChatList.delete_chat(username)
+        try:
+            request = Server.delete_chat(chat_id)
+        except Exception as e:
+            print(e)
+        else:
+            if request:
+                print('Чат удален')
+            else:
+                print('ERROR', request.status_code)
+
+    elif inp == '/list/': # /list/
         list_chats = ChatList.get_list_chats()
         if list_chats:
             for chat in list_chats:
@@ -181,7 +205,7 @@ while True:
         else:  
             print('Нет чатов...')
 
-    elif inp == '/exit/':
+    elif inp == '/exit/': # /exit/
         exit()
 
     else:
