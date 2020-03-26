@@ -25,18 +25,33 @@ class Thread(threading.Thread):
 	
 	def run(self):
 		while True:
-			if not self.stop:
-				messages = Server.get_messages_from_chat(self.chat_id, self.initial)
-				time.sleep(3)
+			time.sleep(3)
 
-				messages = list(map(Message.decrypt, messages, [self.closed_key] * len(messages)))
-				messages = list(map(Message.format, messages))
-
-				for message in messages:
-					logging.info(f'> :SERVER: |NEW MESSAGE| {message}')
-					print(message)
-
-				self.initial += len(messages)
-				ChatList.update_initial(self.username, len(messages))
-			else:
+			if self.stop:
 				break
+
+			try:
+				response = Server.get_messages_from_chat(self.chat_id, self.initial)
+			except Exception as e:
+				print('ERROR', e)
+				continue
+			else:
+				if response:
+					messages = response.json()
+				elif response.status_code == 404:
+					continue
+				else:
+					print('SERVER ERROR', response.status_code, response.text)
+					continue
+			
+			# decoding
+			messages = list(map(Message.decrypt, messages, [self.closed_key] * len(messages)))
+			# formating
+			messages = list(map(Message.format, messages))
+
+			for message in messages:
+				logging.info(f'> :SERVER: |NEW MESSAGE| {message}')
+				print(message)
+
+			self.initial += len(messages)
+			ChatList.update_initial(self.username, len(messages))	
