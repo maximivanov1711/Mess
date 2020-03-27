@@ -33,6 +33,7 @@ class Thread(threading.Thread):
 			try:
 				response = Server.get_messages_from_chat(self.chat_id, self.initial)
 			except Exception as e:
+				logging.info(f'ERROR {e}')
 				print('ERROR', e)
 				continue
 			else:
@@ -41,6 +42,7 @@ class Thread(threading.Thread):
 				elif response.status_code == 404:
 					continue
 				else:
+					logging.info(f'> :SERVER: !ERROR! |get_massages_from_chat| code={response.status_code} response={response.text}')
 					print('SERVER ERROR', response.status_code, response.text)
 					continue
 			

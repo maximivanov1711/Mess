@@ -42,6 +42,7 @@ except (FileNotFoundError, AssertionError):
             file.write(username)
 
         print('Регистрация прошла успешно!')
+        break
 finally:
     User = Client(username)
     print(f'Привет, {User.username}')
@@ -99,7 +100,7 @@ while True:
         closed_key = attribuеs[2]
 
         try:
-            request = Server.user_is_created(username)
+            response = Server.user_is_created(username)
         except Exception as e:
             print(e)
             continue
@@ -182,7 +183,7 @@ while True:
 
         if not ChatList.chat_is_created(username):
             print('Такого чата нет...')
-            continues
+            continue
 
         chat_id = ChatList.get_chat(username)['chat_id']
         
