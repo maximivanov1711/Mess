@@ -127,7 +127,7 @@ class Server:
 		# 		logging.info(f'> :SERVER: |get_messages_from_chat| code={response.status_code}')
 		# 		return response
 		# 	else:
-		#		logging.info(f'> :SERVER: !ERROR! |get_messages_from_chat| code={response.status_code} response={response.text}')
+		# 		logging.info(f'> :SERVER: !ERROR! |get_messages_from_chat| code={response.status_code} response={response.text}')
 		# 		return response
 		return [['07-03-2020', 12345, 'Dmitriy', [14455075648, 14038102312, 15011040096, 15011040096, 15428013432]]]
 
